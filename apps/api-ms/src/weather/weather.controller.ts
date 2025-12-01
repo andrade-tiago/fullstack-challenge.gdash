@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { WeatherService } from "./weather.service";
-import type { WeatherLogCreateDto } from "./dtos/weather-log-create.dto";
-import type { WeatherLogListDto } from "./dtos/weather-log-list.dto";
+import { Body, Controller, Get, Header, Post, Query, Res, StreamableFile } from '@nestjs/common'
+import { WeatherService } from './weather.service'
+import type { WeatherLogCreateDto } from './dtos/weather-log-create.dto'
+import type { WeatherLogListDto } from './dtos/weather-log-list.dto'
+import type { WeatherLogXlsxDto } from './dtos/weather-log-xlsx.dto'
+import { Readable } from 'stream'
 
 @Controller('weather')
 export class WeatherController {
@@ -18,5 +20,15 @@ export class WeatherController {
   @Get('logs')
   async list(@Query() query: WeatherLogListDto) {
     return this._weatherService.list(query)
+  }
+
+  @Get('logs/export/xlsx')
+  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  @Header('Content-Disposition', 'attachment; filename="weather.xlsx"')
+  async exportToXlsx(@Query() query: WeatherLogXlsxDto) {
+    const fileBuffer = await this._weatherService.exportToXlsx(query)
+
+    const stream = Readable.from(fileBuffer);
+    return new StreamableFile(stream);
   }
 }

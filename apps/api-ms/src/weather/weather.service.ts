@@ -7,6 +7,8 @@ import { WeatherLogListDto } from "./dtos/weather-log-list.dto";
 import { Pagination } from "src/common/dtos/pagination.dto";
 import { WeatherLogResponseDto } from "./dtos/weather-log-response.dto";
 import { WeatherLogMapper } from "./weather-log.mapper";
+import { WeatherLogXlsxDto } from "./dtos/weather-log-xlsx.dto";
+import { XlsxService } from "src/common/xlsx.service";
 
 @Injectable()
 export class WeatherService {
@@ -15,6 +17,7 @@ export class WeatherService {
     private readonly _weatherLogModel: Model<WeatherLogDocument>,
 
     private readonly _weatherLogMapper: WeatherLogMapper,
+    private readonly _xlsxService: XlsxService,
   ) {}
 
   async create(command: WeatherLogCreateDto): Promise<string> {
@@ -43,5 +46,18 @@ export class WeatherService {
       totalCount: totalCount,
       data: weatherLogDtos,
     })
+  }
+
+  async exportToXlsx(query: WeatherLogXlsxDto): Promise<Buffer> {
+    query.limit ??= 10
+
+    const logs = await this._weatherLogModel.find()
+      .sort({ createdAt: -1 })
+      .limit(query.limit)
+      .exec()
+    
+    const logDtos = logs.map(this._weatherLogMapper.toResponse)
+
+    return this._xlsxService.exportToXlsx(logDtos)
   }
 }
