@@ -9,4 +9,5 @@ export type WeatherLogResponseDto = {
     windSpeed: number
     precipitation: number
     surfacePressure: number
+    createdAt: string | null
 }

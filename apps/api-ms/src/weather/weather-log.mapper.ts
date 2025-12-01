@@ -14,6 +14,7 @@ export class WeatherLogMapper {
       temperature: log.temperature,
       windDirection: log.windDirection,
       windSpeed: log.windSpeed,
+      createdAt: log.createdAt?.toISOString() ?? null
     }
   }
 }

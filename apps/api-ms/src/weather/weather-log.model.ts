@@ -31,6 +31,13 @@ export class WeatherLog {
   
   @Prop()
   surfacePressure: number
+
+  // timestamp
+  @Prop()
+  createdAt?: Date;
+
+  @Prop()
+  updatedAt?: Date;
 }
 
 export const WeatherLogSchema = SchemaFactory.createForClass(WeatherLog)
