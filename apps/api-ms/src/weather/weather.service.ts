@@ -34,7 +34,11 @@ export class WeatherService {
     const skip = (query.pageNumber - 1) * query.pageSize
 
     const [weatherLogs, totalCount] = await Promise.all([
-      this._weatherLogModel.find().skip(skip).limit(query.pageSize).exec(),
+      this._weatherLogModel.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(query.pageSize)
+        .exec(),
       this._weatherLogModel.countDocuments().exec(),
     ])
 

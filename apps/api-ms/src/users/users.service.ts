@@ -64,7 +64,11 @@ export class UsersService {
     const skip = (query.pageNumber - 1) * query.pageSize
 
     const [users, totalCount] = await Promise.all([
-      this._userModel.find().skip(skip).limit(query.pageSize).exec(),
+      this._userModel.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(query.pageSize)
+        .exec(),
       this._userModel.countDocuments().exec(),
     ])
 
