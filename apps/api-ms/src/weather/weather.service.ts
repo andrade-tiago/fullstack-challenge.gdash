@@ -9,6 +9,8 @@ import { WeatherLogResponseDto } from "./dtos/weather-log-response.dto";
 import { WeatherLogMapper } from "./weather-log.mapper";
 import { WeatherLogXlsxDto } from "./dtos/weather-log-xlsx.dto";
 import { XlsxService } from "src/common/xlsx.service";
+import { CsvService } from "src/common/csv.service";
+import { WeatherLogToCsvDto } from "./dtos/weather-log-to-csv.dto";
 
 @Injectable()
 export class WeatherService {
@@ -18,6 +20,7 @@ export class WeatherService {
 
     private readonly _weatherLogMapper: WeatherLogMapper,
     private readonly _xlsxService: XlsxService,
+    private readonly _csvService: CsvService,
   ) {}
 
   async create(command: WeatherLogCreateDto): Promise<string> {
@@ -63,5 +66,18 @@ export class WeatherService {
     const logDtos = logs.map(this._weatherLogMapper.toResponse)
 
     return this._xlsxService.exportToXlsx(logDtos)
+  }
+
+  async toCsvStruct(query: WeatherLogToCsvDto): Promise<string> {
+    query.limit ??= 10
+
+    const logs = await this._weatherLogModel.find()
+      .sort({ createdAt: -1 })
+      .limit(query.limit)
+      .exec()
+    
+    const logDtos = logs.map(this._weatherLogMapper.toResponse)
+
+    return this._csvService.toCsvStruct(logDtos)
   }
 }

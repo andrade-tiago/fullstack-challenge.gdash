@@ -4,6 +4,7 @@ import type { WeatherLogCreateDto } from './dtos/weather-log-create.dto'
 import type { WeatherLogListDto } from './dtos/weather-log-list.dto'
 import type { WeatherLogXlsxDto } from './dtos/weather-log-xlsx.dto'
 import { Readable } from 'stream'
+import type { WeatherLogToCsvDto } from './dtos/weather-log-to-csv.dto'
 
 @Controller('weather')
 export class WeatherController {
@@ -30,5 +31,12 @@ export class WeatherController {
 
     const stream = Readable.from(fileBuffer);
     return new StreamableFile(stream);
+  }
+
+  @Get('logs/export/csv')
+  @Header('Content-Type', 'text/csv')
+  @Header('Content-Disposition', 'attachment; filename="weather.csv"')
+  async exportToCsv(@Query() query: WeatherLogToCsvDto) {
+    return this._weatherService.toCsvStruct(query);
   }
 }
