@@ -1,0 +1,91 @@
+services:
+  api-ms:
+    build:
+      context: ./apps/api-ms
+      dockerfile: Dockerfile
+    container_name: api-ms
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./apps/api-ms/.env
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - gdash-challenge
+
+  weather-data-provider-ms:
+    build:
+      context: ./apps/weather-data-provider-ms
+      dockerfile: Dockerfile
+    container_name: weather-data-provider-ms
+    env_file:
+      - ./apps/weather-data-provider-ms/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - gdash-challenge
+    restart: on-failure
+
+  message-broker-ms:
+    build:
+      context: ./apps/message-broker-ms
+      dockerfile: Dockerfile
+    container_name: message-broker-ms
+    environment:
+      AMQP_URL: amqp://guest:guest@rabbitmq:5672/
+      API_URL: https://jsonplaceholder.typicode.com/posts
+      RABBITMQ_QUEUE: weather_logs_queue
+    env_file:
+      - ./apps/message-broker-ms/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - gdash-challenge
+    restart: on-failure
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - gdash-challenge
+    healthcheck:
+      test: ["CMD", "sh", "-c", "rabbitmq-diagnostics -q ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - gdash-challenge
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongo_data:
+
+networks:
+  gdash-challenge:
+    driver: bridge
