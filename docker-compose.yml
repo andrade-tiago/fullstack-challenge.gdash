@@ -13,6 +13,11 @@ services:
         condition: service_healthy
     networks:
       - gdash-challenge
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   weather-data-provider-ms:
     build:
@@ -33,14 +38,12 @@ services:
       context: ./apps/message-broker-ms
       dockerfile: Dockerfile
     container_name: message-broker-ms
-    environment:
-      AMQP_URL: amqp://guest:guest@rabbitmq:5672/
-      API_URL: https://jsonplaceholder.typicode.com/posts
-      RABBITMQ_QUEUE: weather_logs_queue
     env_file:
       - ./apps/message-broker-ms/.env
     depends_on:
       rabbitmq:
+        condition: service_healthy
+      api-ms:
         condition: service_healthy
     networks:
       - gdash-challenge
