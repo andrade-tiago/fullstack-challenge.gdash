@@ -1,3 +1,4 @@
+import logging
 import requests
 
 def fetch_open_meteo_api():
@@ -27,4 +28,5 @@ def fetch_open_meteo_api():
     return response.json()
 
   except Exception as ex:
-    print(f"Erro ao consumir a API: {ex}")
+    logging.error(msg=f"Erro ao consumir a API: {ex}")
+    raise
