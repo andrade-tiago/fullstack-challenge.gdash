@@ -39,4 +39,11 @@ export class WeatherController {
   async exportToCsv(@Query() query: WeatherLogToCsvDto) {
     return this._weatherService.toCsvStruct(query);
   }
+
+  @Get('insights')
+  async getIaInsights() {
+    const insightText = await this._weatherService.getInsights()
+
+    return { insightText }
+  }
 }

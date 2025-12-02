@@ -11,6 +11,7 @@ import { WeatherLogXlsxDto } from "./dtos/weather-log-xlsx.dto";
 import { XlsxService } from "src/common/xlsx.service";
 import { CsvService } from "src/common/csv.service";
 import { WeatherLogToCsvDto } from "./dtos/weather-log-to-csv.dto";
+import { IaService } from "src/common/ia.service";
 
 @Injectable()
 export class WeatherService {
@@ -21,6 +22,7 @@ export class WeatherService {
     private readonly _weatherLogMapper: WeatherLogMapper,
     private readonly _xlsxService: XlsxService,
     private readonly _csvService: CsvService,
+    private readonly _iaService: IaService,
   ) {}
 
   async create(command: WeatherLogCreateDto): Promise<string> {
@@ -79,5 +81,20 @@ export class WeatherService {
     const logDtos = logs.map(this._weatherLogMapper.toResponse)
 
     return this._csvService.toCsvStruct(logDtos)
+  }
+
+  async getInsights(): Promise<string> {
+    const logs = await this._weatherLogModel.find()
+      .sort({ createdAt: -1 })
+      .limit(24)
+      .exec()
+
+    const dataForGetInsights = logs.map(this._weatherLogMapper.onlyData)
+
+    const iaInput = `Based on the following data, generate a short, objective paragraph in (PT-BR) with a brief analysis of the climate and a short forecast for an end user. Keep the paragraph concise and avoid using variable names: ${
+      JSON.stringify(dataForGetInsights)
+    }`
+
+    return this._iaService.askToModel(iaInput)
   }
 }
