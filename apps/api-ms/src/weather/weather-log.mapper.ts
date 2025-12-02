@@ -5,15 +5,15 @@ export class WeatherLogMapper {
   toResponse(log: WeatherLogDocument): WeatherLogResponseDto {
     return {
       id: log._id.toString(),
-      apparentTemperature: log.apparentTemperature,
+      apparentTemperatureInCelcius: log.apparentTemperatureInCelcius,
       isDay: log.isDay,
-      rain: log.rain,
-      precipitation: log.precipitation,
-      relativeHumidity: log.relativeHumidity,
-      surfacePressure: log.surfacePressure,
-      temperature: log.temperature,
-      windDirection: log.windDirection,
-      windSpeed: log.windSpeed,
+      rainInMm: log.rainInMm,
+      precipitationInMm: log.precipitationInMm,
+      relativeHumidityInPercent: log.relativeHumidityInPercent,
+      surfacePressureInHpa: log.surfacePressureInHpa,
+      temperatureInCelcius: log.temperatureInCelcius,
+      windDirectionInDegrees: log.windDirectionInDegrees,
+      windSpeedInKmPerHour: log.windSpeedInKmPerHour,
       createdAt: log.createdAt?.toISOString() ?? null
     }
   }

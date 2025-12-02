@@ -1,13 +1,13 @@
 export type WeatherLogResponseDto = {
     id: string
-    temperature: number
-    relativeHumidity: number
-    apparentTemperature: number
+    temperatureInCelcius: number
+    relativeHumidityInPercent: number
+    apparentTemperatureInCelcius: number
     isDay: boolean
-    rain: number
-    windDirection: number
-    windSpeed: number
-    precipitation: number
-    surfacePressure: number
+    rainInMm: number
+    windDirectionInDegrees: number
+    windSpeedInKmPerHour: number
+    precipitationInMm: number
+    surfacePressureInHpa: number
     createdAt: string | null
 }

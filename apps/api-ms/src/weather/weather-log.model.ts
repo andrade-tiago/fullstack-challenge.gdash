@@ -6,31 +6,31 @@ export type WeatherLogDocument = HydratedDocument<WeatherLog>
 @Schema({ timestamps: true })
 export class WeatherLog {
   @Prop()
-  temperature: number
+  temperatureInCelcius: number
 
   @Prop()
-  relativeHumidity: number
+  relativeHumidityInPercent: number
 
   @Prop()
-  apparentTemperature: number
+  apparentTemperatureInCelcius: number
   
   @Prop()
   isDay: boolean
   
   @Prop()
-  rain: number
+  rainInMm: number
   
   @Prop()
-  windDirection: number
+  windDirectionInDegrees: number
   
   @Prop()
-  windSpeed: number
+  windSpeedInKmPerHour: number
   
   @Prop()
-  precipitation: number
+  precipitationInMm: number
   
   @Prop()
-  surfacePressure: number
+  surfacePressureInHpa: number
 
   // timestamp
   @Prop()
