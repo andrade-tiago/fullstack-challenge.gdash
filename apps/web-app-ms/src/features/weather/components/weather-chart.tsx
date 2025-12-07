@@ -43,7 +43,7 @@ const chartConfig = {
     color: "var(--chart-4)",
   },
   rainInMm: {
-    label: "Rain (mm)",
+    label: "Chuva (mm)",
     color: "var(--char-2)",
   },
   windSpeedInKmPerHour: {
