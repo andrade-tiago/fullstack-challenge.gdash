@@ -18,7 +18,7 @@ Desta forma, temos uma arquitetura baseada em microsserviços, com o Docker e o 
 
 ### Requisitos
 
-Para rodar todos os 6 serviços que compõem a infraestrutura da aplicação, juntos ou individualemente, você precisará do **Docker** e do **Docker Compose** instalados em sua máquina. Você pode encontrar o conjunto no [site oficial](https://www.docker.com/).
+Para rodar todos os 6 serviços que compõem a infraestrutura da aplicação, juntos ou individualmente, você precisará do **Docker** e do **Docker Compose** instalados em sua máquina. Você pode encontrar o conjunto no [site oficial](https://www.docker.com/).
 
 ### Executando tudo
 
@@ -30,7 +30,7 @@ docker compose up -d
 
 > **Importante**: você precisará definir as variáveis de ambiente, conforme o arquivo `.env.example` presente na pasta raiz de cada serviço do diretório `apps`. Na prática, crie um arquivo `.env` junto ao `.env.example` de cada diretório, mas com dados válidos.
 
-Os seguintes serviços estraão acessíveis nas respectivas portas:
+Os seguintes serviços estarão acessíveis nas respectivas portas:
 - NestJS: `3000`
 - Front-end web: `4173`
 - Painel de gerenciamento do RabbitMQ: `15672`
@@ -52,8 +52,8 @@ Temos os seguintes serviços:
 - `message-consumer-ms`: serviço em Go;
 - `api-ms`: NestJS;
 - `web-app-ms`: front-end web;
-- `rabbitmq`: RabbitMQ;
-- `mongo`: MongoDB;
+- `rabbitmq`: RabbitMQ; e
+- `mongo`: MongoDB.
 
 Ao executar um serviço separadamente, todos os serviços dos quais este depende serão também executados. Por exemplo, digamos que eu queira executar o serviço em Go:
 
@@ -101,5 +101,3 @@ Este comando utilizará o gerenciador de pacotes do PNPM para executar o script 
 - Senha: `Admin@1234`
 
 Você deve ver o dashboard climático depois disso. :rocket:
-
-> Documentação por Tiago Andrade, nenhuma IA utilizada. :sparkles:
