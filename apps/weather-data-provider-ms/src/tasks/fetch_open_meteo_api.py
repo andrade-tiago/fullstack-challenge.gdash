@@ -1,12 +1,16 @@
 import logging
+import os
 import requests
+
+LATITUDE = float(os.getenv("LATITUDE"))
+LONGITUDE = float(os.getenv("LONGITUDE"))
 
 def fetch_open_meteo_api():
   api_url = "https://api.open-meteo.com/v1/forecast"
 
   params = {
-    "latitude": -23.55,
-    "longitude": -46.63,
+    "latitude": LATITUDE,
+    "longitude": LONGITUDE,
     "current": ",".join([
       "temperature_2m",
       "relative_humidity_2m",
