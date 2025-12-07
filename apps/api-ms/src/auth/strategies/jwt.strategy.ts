@@ -4,7 +4,7 @@ import { JwtPayloadDto } from '../dtos/jwt-payload.dto';
 import { AuthDataDto } from '../dtos/auth-data.dto';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/config/env';
-import { Inject, Logger } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -24,6 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       userId: payload.sub,
       userEmail: payload.email,
+      userRole: payload.role,
     }
   }
 }

@@ -83,7 +83,7 @@ function WeatherDashoardPage() {
             </CardHeader>
             <CardContent className="text-center">
               <span className="text-3xl">
-                {lastWeatherLog!.apparentTemperatureInCelcius.toLocaleString()}°C
+                {lastWeatherLog!.temperatureInCelcius.toLocaleString()}°C
               </span>
             </CardContent>
           </Card>

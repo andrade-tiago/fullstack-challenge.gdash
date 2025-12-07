@@ -6,6 +6,8 @@ import { queryClient } from './shared/api/query-client.ts'
 import { RouterProvider } from 'react-router-dom'
 import { appRouter } from './app/router.tsx'
 import { AuthProvider } from './features/auth/context/auth-context.tsx'
+
+// @ts-ignore
 import { configuration } from './env.ts' // necessary to validating on bootstrap
 
 createRoot(document.getElementById('root')!).render(

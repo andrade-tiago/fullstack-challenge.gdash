@@ -1,6 +1,8 @@
 import {
-  ConflictException, Injectable,
-  Logger, NotFoundException } from '@nestjs/common';
+  ConflictException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common';
 import { UserCreateDto } from './dtos/user-create.dto';
 import { User, UserDocument } from './user.model';
 import { PasswordService } from '../common/password.service';
@@ -38,6 +40,7 @@ export class UsersService {
       name: command.name,
       email: command.email,
       pass: passwordHash,
+      role: command.role,
     })
 
     await user.save()
@@ -89,6 +92,7 @@ export class UsersService {
       throw new NotFoundException('User not found.')
 
     user.name = command.name
+    user.role = command.role
 
     await user.save()
   }

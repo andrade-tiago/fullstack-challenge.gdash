@@ -3,6 +3,11 @@ import { HydratedDocument } from "mongoose"
 
 export type UserDocument = HydratedDocument<User>
 
+export enum UserRole {
+  Admin = "admin",
+  User = "user",
+}
+
 @Schema()
 export class User {
   @Prop({
@@ -22,6 +27,11 @@ export class User {
     required: true
   })
   pass: string
+
+  @Prop({
+    required: true
+  })
+  role: UserRole
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

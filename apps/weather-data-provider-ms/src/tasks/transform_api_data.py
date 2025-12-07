@@ -1,5 +1,6 @@
 def transform_api_data(data):
   return {
+    "createdAt": data["time"],
     "temperatureInCelcius": data["temperature_2m"],
     "relativeHumidityInPercent": data["relative_humidity_2m"],
     "apparentTemperatureInCelcius": data["apparent_temperature"],

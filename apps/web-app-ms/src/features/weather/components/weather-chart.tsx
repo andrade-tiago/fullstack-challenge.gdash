@@ -52,6 +52,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+type ChartConfigKey = keyof typeof chartConfig
+
 type AppLineChartCardProps = {
   className?: string
 }
@@ -63,7 +65,7 @@ export function WeatherChart(props: AppLineChartCardProps) {
   })
 
   const [attribute, setAttribute] =
-    React.useState<keyof typeof chartConfig>("temperatureInCelcius")
+    React.useState<ChartConfigKey>("temperatureInCelcius")
 
   const chartData = React.useMemo(() =>
     weatherLogs.data?.data.map(item => ({ ...item,
@@ -82,16 +84,21 @@ export function WeatherChart(props: AppLineChartCardProps) {
           Exibindo os últimos 7 dados coletados
         </CardDescription>
         <CardAction>
-          <Select value={attribute} onValueChange={setAttribute}>
+          <Select 
+            value={attribute}
+            onValueChange={value => setAttribute(value as ChartConfigKey)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Selecione um atributo" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Atributos</SelectLabel>
-                <SelectItem value="temperatureInCelcius">Temperatura</SelectItem>
-                <SelectItem value="rainInMm">Chuva</SelectItem>
-                <SelectItem value="windSpeedInKmPerHour">Vento</SelectItem>
+                {(Object.keys(chartConfig)).map(itemKey =>
+                  <SelectItem key={itemKey} value={itemKey}>
+                    {chartConfig[itemKey as ChartConfigKey].label}
+                  </SelectItem>
+                )}
               </SelectGroup>
             </SelectContent>
           </Select>

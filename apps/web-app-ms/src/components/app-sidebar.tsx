@@ -19,8 +19,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { UserRole } from "@/features/users/types/user";
 
 type SidebarListItem = {
   title: string
@@ -28,6 +33,7 @@ type SidebarListItem = {
   icon: LucideIcon
 }
 type SidebarList = {
+  role?: UserRole
   label: string
   items: SidebarListItem[]
 }
@@ -45,6 +51,7 @@ const sidebarGroups: SidebarList[] = [
   },
   {
     label: "Administrador",
+    role: UserRole.Admin,
     items: [
       {
         title: "Usuários",
@@ -62,6 +69,13 @@ export function AppSidebar() {
     auth.logout()
   }
 
+  function shouldShowGroup(group: SidebarList) {
+    if (!group.role)
+      return true
+
+    return group.role === auth.user?.role
+  }
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -69,7 +83,7 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {sidebarGroups.map(group =>
+        {sidebarGroups.map(group => shouldShowGroup(group) &&
           <SidebarGroup key={group.label}>
             <SidebarGroupLabel>
               {group.label}

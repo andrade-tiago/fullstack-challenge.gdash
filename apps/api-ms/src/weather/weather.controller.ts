@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Header, Post, Query, Res, StreamableFile } from '@nestjs/common'
 import { WeatherService } from './weather.service'
-import type { WeatherLogCreateDto } from './dtos/weather-log-create.dto'
-import type { WeatherLogListDto } from './dtos/weather-log-list.dto'
-import type { WeatherLogXlsxDto } from './dtos/weather-log-xlsx.dto'
+import { WeatherLogCreateDto } from './dtos/weather-log-create.dto'
+import { WeatherLogListDto } from './dtos/weather-log-list.dto'
+import { WeatherLogXlsxDto } from './dtos/weather-log-xlsx.dto'
 import { Readable } from 'stream'
-import type { WeatherLogToCsvDto } from './dtos/weather-log-to-csv.dto'
+import { WeatherLogToCsvDto } from './dtos/weather-log-to-csv.dto'
 
 @Controller('weather')
 export class WeatherController {

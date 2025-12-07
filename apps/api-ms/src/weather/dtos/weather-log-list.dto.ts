@@ -1,4 +1,3 @@
-export type WeatherLogListDto = {
-  pageNumber: number
-  pageSize: number
-}
+import { PaginationQuery } from "src/common/dtos/pagination-query.dto";
+
+export class WeatherLogListDto extends PaginationQuery {}

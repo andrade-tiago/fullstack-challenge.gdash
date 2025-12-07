@@ -53,7 +53,7 @@ function WeatherDatatable(props: WeatherDatatableProps) {
           </TableRow>
         ))}
         {weatherLogs.data && weatherLogs.data.data.map(item =>
-          <TableRow key={item.createdAt.toString()}>
+          <TableRow key={item.id}>
             <TableCell>
               {dayjs(item.createdAt).format("HH:mm")}
             </TableCell>

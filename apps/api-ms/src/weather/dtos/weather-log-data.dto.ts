@@ -8,5 +8,5 @@ export type WeatherLogDataDto = {
   windSpeedInKmPerHour: number
   precipitationInMm: number
   surfacePressureInHpa: number
-  createdAt?: Date
+  createdAt: Date
 }

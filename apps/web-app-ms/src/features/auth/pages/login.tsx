@@ -111,7 +111,10 @@ function LoginPage() {
 
           <CardFooter>
             <div className="w-full flex justify-end">
-              <Button type="submit" disabled={isLoading} className="w-full md:w-max">
+              <Button
+                type="submit"
+                disabled={isLoading || !form.formState.isValid}
+                className="w-full md:w-max bg-cyan-800">
                 Login
               </Button>
             </div>

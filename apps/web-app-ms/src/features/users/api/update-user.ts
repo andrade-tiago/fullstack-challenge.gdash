@@ -1,7 +1,9 @@
 import { api } from "@/shared/api/api"
+import type { UserRole } from "../types/user"
 
 type UserData = {
   name: string
+  role: UserRole
 }
 
 async function updateUser(id: string, userData: UserData) {

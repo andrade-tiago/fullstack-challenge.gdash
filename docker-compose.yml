@@ -19,6 +19,21 @@ services:
       timeout: 5s
       retries: 3
 
+  web-app-ms:
+    build:
+      context: ./apps/web-app-ms
+      dockerfile: Dockerfile
+    container_name: web-app-ms
+    ports:
+      - "4173:4173"
+    env_file:
+      - ./apps/web-app-ms/.env
+    depends_on:
+      api-ms:
+        condition: service_healthy
+    networks:
+      - gdash-challenge
+
   weather-data-provider-ms:
     build:
       context: ./apps/weather-data-provider-ms

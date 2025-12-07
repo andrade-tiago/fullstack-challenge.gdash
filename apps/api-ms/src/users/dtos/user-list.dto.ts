@@ -1,4 +1,3 @@
-export type UserListDto = {
-  pageNumber: number
-  pageSize: number
-}
+import { PaginationQuery } from "src/common/dtos/pagination-query.dto";
+
+export class UserListDto extends PaginationQuery {}

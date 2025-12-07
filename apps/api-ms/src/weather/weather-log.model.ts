@@ -3,7 +3,7 @@ import { HydratedDocument } from "mongoose";
 
 export type WeatherLogDocument = HydratedDocument<WeatherLog>
 
-@Schema({ timestamps: true })
+@Schema()
 export class WeatherLog {
   @Prop()
   temperatureInCelcius: number
@@ -34,10 +34,7 @@ export class WeatherLog {
 
   // timestamp
   @Prop()
-  createdAt?: Date;
-
-  @Prop()
-  updatedAt?: Date;
+  createdAt: Date;
 }
 
 export const WeatherLogSchema = SchemaFactory.createForClass(WeatherLog)
