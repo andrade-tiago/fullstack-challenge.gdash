@@ -10,7 +10,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -33,7 +32,6 @@ import React from "react"
 import dayjs from "dayjs"
 import { useQuery } from "@tanstack/react-query"
 import { fetchWeatherLogs } from "../api/fetch-weather-logs"
-import { Button } from "@/components/ui/button"
 
 const chartConfig = {
   temperatureInCelcius: {
