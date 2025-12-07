@@ -31,12 +31,12 @@ func NewConsumerClient(apiClient *APIClient) (*ConsumerClient, error) {
 	}
 
 	_, err = ch.QueueDeclare(
-		QueueName, // name
-		true,      // durable
-		false,     // delete when unused
-		false,     // exclusive
-		false,     // no-wait
-		nil,       // arguments
+		QueueName,
+		true,
+		false,
+		false,
+		false,
+		nil,
 	)
 	if err != nil {
 		ch.Close()
@@ -70,36 +70,30 @@ func (c *ConsumerClient) Close() {
 
 func (c *ConsumerClient) StartConsuming() {
 	msgs, err := c.ch.Consume(
-		QueueName, // queue
-		"",        // consumer
-		false,     // auto-ack (setado como false para controle manual)
-		false,     // exclusive
-		false,     // no-local
-		false,     // no-wait
-		nil,       // args
+		QueueName,
+		"",
+		false,
+		false,
+		false,
+		false,
+		nil,
 	)
 	if err != nil {
 		log.Fatalf("Falha ao registrar o consumidor: %v", err)
 	}
 
-	log.Printf("⏳ Aguardando mensagens na fila '%s'. Para sair, pressione CTRL+C.", QueueName)
+	log.Printf("Aguardando mensagens na fila '%s'. Para sair, pressione CTRL+C.", QueueName)
 
-	// Loop infinito para processar as mensagens
 	for d := range msgs {
-		log.Printf("📩 Mensagem recebida: %s", d.Body)
+		log.Printf("Mensagem recebida: %s", d.Body)
 
-		// 1. Envia os dados para a API externa
 		err := c.apiClient.SendData(d.Body)
 
-		// 2. Confirma ou rejeita a mensagem com base no resultado da API
 		if err != nil {
 			log.Printf("Erro ao enviar para API: %v. Rejeitando mensagem (requeue=true)", err)
-			// Rejeita a mensagem e a coloca de volta na fila
-			// Use Requeue=false para evitar loops infinitos em caso de erro persistente
 			d.Nack(false, true)
 		} else {
 			log.Printf("Processamento da mensagem concluído. Confirmando consumo.")
-			// Confirma o consumo da mensagem (ACK)
 			d.Ack(false)
 		}
 	}
