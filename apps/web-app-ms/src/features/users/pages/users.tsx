@@ -36,6 +36,8 @@ import { fetchUsers } from "../api/fetch-users"
 import { CreateUserDialog } from "../components/create-user-dialog"
 import { Badge } from "@/components/ui/badge"
 import type { UserRoleBadge } from "../types/user-role-badge"
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
 
 const pageSize = 10
 
@@ -71,6 +73,7 @@ function UsersPage() {
     setShowCreateUserDialog(true)
   }
   function handleCreateUserCompleted() {
+    toast.success("Adicionado um novo usuário!")
     queryClient.invalidateQueries({
       queryKey: ["users"],
     })
@@ -81,6 +84,7 @@ function UsersPage() {
     setShowUpdateUserDialog(true)
   }
   function handleUpdateUserCompleted() {
+    toast.success("Usuário atualizado!")
     setSelectedUser(null)
 
     queryClient.invalidateQueries({
@@ -93,6 +97,7 @@ function UsersPage() {
     setShowDeleteUserDialog(true)
   }
   function handleDeleteUserCompleted() {
+    toast.success("Usuário deletado!")
     setSelectedUser(null)
     setPageNumber(1)
 
@@ -157,7 +162,7 @@ function UsersPage() {
                 <TableHead>Nome</TableHead>
                 <TableHead>E-mail</TableHead>
                 <TableHead>Privilégio</TableHead>
-                <TableHead className="flex justify-center">Opções</TableHead>
+                <TableHead>Opções</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -183,7 +188,7 @@ function UsersPage() {
                       {userRoleBadge[user.role].label}
                     </Badge>
                   </TableCell>
-                  <TableCell className="flex gap-2 justify-end">
+                  <TableCell className="flex gap-2 justify-center">
                     <Button
                       variant="secondary"
                       onClick={() => handleUpdateUser(user)}>
@@ -242,6 +247,7 @@ function UsersPage() {
         onOpenChange={setShowDeleteUserDialog}
         onSuccess={handleDeleteUserCompleted}
       />
+      <Toaster />
     </div>
   )
 }

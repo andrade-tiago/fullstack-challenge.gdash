@@ -105,7 +105,7 @@ function CreateUserDialog(props: CreateUserDialogProps) {
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input placeholder="Cicrano" {...field} />
+                      <Input placeholder="Fulano" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -133,7 +133,7 @@ function CreateUserDialog(props: CreateUserDialogProps) {
                   <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
-                      <Input placeholder="Um@ S3nha f0rte!" {...field} />
+                      <Input type="password" placeholder="Um@ S3nha f0rte!" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

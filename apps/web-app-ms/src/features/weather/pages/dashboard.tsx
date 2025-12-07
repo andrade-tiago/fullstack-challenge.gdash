@@ -2,6 +2,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
@@ -20,21 +21,31 @@ import { WeatherChart } from "../components/weather-chart"
 import { useQuery } from "@tanstack/react-query"
 import { fetchWeatherLogs } from "../api/fetch-weather-logs"
 import { fetchWeatherIaInsight } from "../api/fetch-weather-ia-insight"
+import { Button } from "@/components/ui/button"
+import { getCSV } from "../api/get-csv"
+import { getXlsx } from "../api/get-xlsx"
 
 function WeatherDashoardPage() {
   const weatherLogs = useQuery({
     queryFn: () => fetchWeatherLogs({ pageSize: 1, pageNumber: 1 }),
-    queryKey: [ "weather", "logs", { pageSize: 1, pageNumber: 1 } ]
+    queryKey: ["weather", "logs", { pageSize: 1, pageNumber: 1 }]
   })
   const iaInsight = useQuery({
     queryFn: () => fetchWeatherIaInsight({ lastLogs: 24 }),
-    queryKey: [ "weather", "insight", { lastLogs: 24 } ]
+    queryKey: ["weather", "insight", { lastLogs: 24 }]
   })
 
   const lastWeatherLog = React.useMemo(
     () => weatherLogs.data?.data.at(-1),
-    [ weatherLogs.data ],
+    [weatherLogs.data],
   )
+
+  async function handleDownloadCsv() {
+    getCSV({ logs: 100 })
+  }
+  async function handleDownloadXlsx() {
+    getXlsx({ logs: 100 })
+  }
 
   return (
     <div className="p-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -144,6 +155,18 @@ function WeatherDashoardPage() {
         <CardContent>
           <WeatherDatatable className="flex-1" />
         </CardContent>
+        <CardFooter className="flex justify-end gap-2">
+          <Button
+            onClick={handleDownloadCsv}
+            className="bg-cyan-700 hover:bg-cyan-800">
+            Baixar CSV
+          </Button>
+          <Button
+            onClick={handleDownloadXlsx}
+            className="bg-amber-600 hover:bg-amber-700">
+            Baixar Planilha
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   )
