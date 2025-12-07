@@ -48,13 +48,13 @@ services:
       - gdash-challenge
     restart: on-failure
 
-  message-broker-ms:
+  message-consumer-ms:
     build:
-      context: ./apps/message-broker-ms
+      context: ./apps/message-consumer-ms
       dockerfile: Dockerfile
-    container_name: message-broker-ms
+    container_name: message-consumer-ms
     env_file:
-      - ./apps/message-broker-ms/.env
+      - ./apps/message-consumer-ms/.env
     depends_on:
       rabbitmq:
         condition: service_healthy
