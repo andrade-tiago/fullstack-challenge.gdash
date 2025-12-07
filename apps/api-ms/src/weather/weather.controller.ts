@@ -1,12 +1,16 @@
-import { Body, Controller, Get, Header, Post, Query, Res, StreamableFile } from '@nestjs/common'
+import { Body, Controller, Get, Header, Post, Query, Res, StreamableFile, UseGuards } from '@nestjs/common'
 import { WeatherService } from './weather.service'
 import { WeatherLogCreateDto } from './dtos/weather-log-create.dto'
 import { WeatherLogListDto } from './dtos/weather-log-list.dto'
 import { WeatherLogXlsxDto } from './dtos/weather-log-xlsx.dto'
 import { Readable } from 'stream'
 import { WeatherLogToCsvDto } from './dtos/weather-log-to-csv.dto'
+import { ApiBearerAuth } from '@nestjs/swagger'
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard'
 
 @Controller('weather')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class WeatherController {
   constructor(
     private readonly _weatherService: WeatherService,

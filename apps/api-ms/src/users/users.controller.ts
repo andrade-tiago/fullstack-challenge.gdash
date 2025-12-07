@@ -11,9 +11,11 @@ import type { AuthDataDto } from 'src/auth/dtos/auth-data.dto';
 import { RolesGuard } from 'src/auth/guards/roles-guard';
 import { Roles } from 'src/auth/decorators/allowed-roles.decorator';
 import { UserRole } from './user.model';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('users')
-export class UsersConstroller {
+@ApiBearerAuth()
+export class UsersController {
   constructor(
     private readonly _usersService: UsersService,
   ) {}
