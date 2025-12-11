@@ -29,7 +29,6 @@ import { Button } from "@/components/ui/button"
 import { useQuery } from "@tanstack/react-query"
 import { queryClient } from "@/shared/api/query-client"
 import { UserRole, type User } from "../types/user"
-import { Input } from "@/components/ui/input"
 import { UpdateUserDialog } from "../components/update-user-dialog"
 import { DeleteUserDialog } from "../components/delete-user-dialog"
 import { fetchUsers } from "../api/fetch-users"
@@ -38,6 +37,8 @@ import { Badge } from "@/components/ui/badge"
 import type { UserRoleBadge } from "../types/user-role-badge"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
+import { useSearchParams } from "react-router-dom"
+import { PaginationInput } from "../../../components/pagination-input"
 
 const pageSize = 10
 
@@ -53,7 +54,12 @@ const userRoleBadge: Record<UserRole, UserRoleBadge> = {
 }
 
 function UsersPage() {
-  const [pageNumber, setPageNumber] = React.useState(1)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [pageNumber, setPageNumber] = React.useState(() => {
+    const page = Number(searchParams.get('page'))
+
+    return Number.isInteger(page) && page >= 1 ? page : 1
+  })
 
   const [selectedUser, setSelectedUser] = React.useState<User | null>(null)
   const [showCreateUserDialog, setShowCreateUserDialog] = React.useState(false)
@@ -63,9 +69,10 @@ function UsersPage() {
   const users = useQuery({
     queryFn: () => fetchUsers({ pageSize, pageNumber }),
     queryKey: ["users", { pageSize, pageNumber }],
-    staleTime: 60 * 1,
+    staleTime: 60 * 1000,
   })
 
+  const totalPages = users.data?.totalPages ?? 1
   const isLastPage = pageNumber === users.data?.totalPages
   const isFirstPage = pageNumber === 1
 
@@ -99,43 +106,41 @@ function UsersPage() {
   function handleDeleteUserCompleted() {
     toast.success("Usuário deletado!")
     setSelectedUser(null)
-    setPageNumber(1)
 
     queryClient.invalidateQueries({
       queryKey: ["users"],
     })
   }
+  
+  function handleGoToFirstPage() {
+    setPageNumber(1)
+  }
+  function handleGoToPreviousPage() {
+    setPageNumber(current => isFirstPage ? current : current - 1)
+  }
+  function handleGoToNextPage() {
+    setPageNumber(current => isLastPage ? current : current + 1)
+  }
+  function handleGoToLastPage() {
+    setPageNumber(totalPages)
+  }
 
-  function handleChangePageNumber(value: string) {
-    if (!users.data) return
+  React.useEffect(function revalidatePageNumber() {
+    setPageNumber(current => current > totalPages ? totalPages : current)
+  }, [totalPages])
 
-    let pageNumber = Number.parseInt(value)
-    if (pageNumber < 1)
-      pageNumber = 1
-    else if (pageNumber > users.data.totalPages)
-      pageNumber = users.data.totalPages
-
-    setPageNumber(pageNumber)
-  }
-  function handleFirstPage() {
-    setPageNumber(isFirstPage ? pageNumber : 1)
-  }
-  function handlePreviousPage() {
-    setPageNumber(isFirstPage ? pageNumber : pageNumber - 1)
-  }
-  function handleNextPage() {
-    setPageNumber(isLastPage ? pageNumber : pageNumber + 1)
-  }
-  function handleLastPage() {
-    setPageNumber(isLastPage ? pageNumber : (users.data?.totalPages ?? 1))
-  }
+  React.useEffect(function updatePageNumberOnSearchParams() {
+    setSearchParams({ page: pageNumber.toString() })
+  }, [pageNumber])
 
   return (
     <div className="p-5">
       <Card>
         <CardHeader>
           <CardAction>
-            <Button onClick={handleCreateUser} className="ml-auto bg-cyan-800 hover:bg-cyan-900">
+            <Button
+              onClick={handleCreateUser}
+              className="ml-auto bg-cyan-800 hover:bg-cyan-900">
               Adicionar
             </Button>
           </CardAction>
@@ -207,23 +212,22 @@ function UsersPage() {
         </CardContent>
         <CardFooter>
           <div className="flex gap-2 mx-auto">
-            <Button variant="outline" disabled={isFirstPage} onClick={handleFirstPage}>
+            <Button variant="outline" disabled={isFirstPage} onClick={handleGoToFirstPage}>
               <ChevronsLeftIcon />
             </Button>
-            <Button variant="outline" disabled={isFirstPage} onClick={handlePreviousPage}>
+            <Button variant="outline" disabled={isFirstPage} onClick={handleGoToPreviousPage}>
               <ChevronLeftIcon />
             </Button>
-            <Input
-              disabled
-              type="number"
-              className="w-12"
-              value={pageNumber}
-              onChange={event => handleChangePageNumber(event.target.value)}
+            <PaginationInput
+              currentPage={pageNumber}
+              totalPages={totalPages}
+              onChangePage={setPageNumber}
+              className="w-20"
             />
-            <Button variant="outline" disabled={isLastPage} onClick={handleNextPage}>
+            <Button variant="outline" disabled={isLastPage} onClick={handleGoToNextPage}>
               <ChevronRightIcon />
             </Button>
-            <Button variant="outline" disabled={isLastPage} onClick={handleLastPage}>
+            <Button variant="outline" disabled={isLastPage} onClick={handleGoToLastPage}>
               <ChevronsRightIcon />
             </Button>
           </div>
