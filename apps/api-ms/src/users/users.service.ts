@@ -68,7 +68,7 @@ export class UsersService {
 
     const [users, totalCount] = await Promise.all([
       this._userModel.find()
-        .sort({ createdAt: -1 })
+        .sort({ _id: -1 })
         .skip(skip)
         .limit(query.pageSize)
         .exec(),
