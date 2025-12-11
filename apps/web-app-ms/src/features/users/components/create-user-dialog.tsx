@@ -48,7 +48,7 @@ const schema = z
         "A senha deve conter pelo menos uma letra minúcula.")
       .regex(/[0-9]/,
         "A senha deve conter pelo menos um número.")
-      .regex(/[!@#$%&*,.-^~?<>(\[\]/\\|)]/,
+      .regex(/[\!\@\#\$\%\&\*\,\.\-\^\~\?\<\>\(\)\[\]\/\\\|]/,
         "A senha deve conter pelo menos um caractere especial."),
 
     confirmPassword: z.string(),
