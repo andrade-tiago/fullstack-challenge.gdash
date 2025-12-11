@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form"
 import z from "zod"
 import { useAuth } from "../context/auth-context"
 import React from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, useSearchParams } from "react-router-dom"
 import { login } from "../api/login"
 import { PassowordInput } from "@/components/password-input"
 
@@ -45,6 +45,7 @@ function LoginPage() {
     },
   })
   const [ isLoading, setIsLoading ] = React.useState(false)
+  const [searchParams] = useSearchParams()
 
   const handleSubmit = form.handleSubmit(async (values: SchemaValues) => {
     setIsLoading(true)  
@@ -65,7 +66,9 @@ function LoginPage() {
   })
 
   if (auth.user) {
-    return <Navigate to="/" />
+    const to = searchParams.get("redirect") || "/"
+
+    return <Navigate to={to} />
   }
   return (
     <Card className="w-full max-w-sm mx-auto">
