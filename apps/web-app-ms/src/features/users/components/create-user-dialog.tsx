@@ -24,6 +24,7 @@ import React from "react"
 import { validation } from "../constants/validation"
 import z from "zod"
 import { createUser } from "../api/create-user"
+import { PassowordInput } from "@/components/password-input"
 
 const schema = z.object({
   name: z.string().trim()
@@ -133,7 +134,7 @@ function CreateUserDialog(props: CreateUserDialogProps) {
                   <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Um@ S3nha f0rte!" {...field} />
+                      <PassowordInput placeholder="Um@ S3nha f0rte!" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

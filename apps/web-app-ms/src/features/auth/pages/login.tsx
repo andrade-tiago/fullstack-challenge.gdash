@@ -23,6 +23,7 @@ import { useAuth } from "../context/auth-context"
 import React from "react"
 import { Navigate } from "react-router-dom"
 import { login } from "../api/login"
+import { PassowordInput } from "@/components/password-input"
 
 const INCORRECT_DATA = "E-mail ou senha incorretos."
 const PASSWORD_MAX_LENGTH = 72
@@ -101,7 +102,7 @@ function LoginPage() {
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <PassowordInput {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
