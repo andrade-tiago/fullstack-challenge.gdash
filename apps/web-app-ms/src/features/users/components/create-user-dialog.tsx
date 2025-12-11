@@ -26,32 +26,40 @@ import z from "zod"
 import { createUser } from "../api/create-user"
 import { PassowordInput } from "@/components/password-input"
 
-const schema = z.object({
-  name: z.string().trim()
-    .min(validation.USER_NAME_MIN_LENGTH,
-      `O nome deve ter pelo menos ${validation.USER_NAME_MIN_LENGTH} caracteres.`)
-    .max(validation.USER_NAME_MAX_LENGTH,
-      `O nome deve ter no máximo ${validation.USER_NAME_MAX_LENGTH} caracteres.`),
+const schema = z
+  .object({
+    name: z.string().trim()
+      .min(validation.USER_NAME_MIN_LENGTH,
+        `O nome deve ter pelo menos ${validation.USER_NAME_MIN_LENGTH} caracteres.`)
+      .max(validation.USER_NAME_MAX_LENGTH,
+        `O nome deve ter no máximo ${validation.USER_NAME_MAX_LENGTH} caracteres.`),
 
-  email: z
-    .email("O e-mail precisa ser válido."),
+    email: z
+      .email("O e-mail precisa ser válido."),
 
-  password: z.string()
-    .min(validation.USER_PASS_MIN_LENGTH,
-      `A senha deve ter pelo menos ${validation.USER_PASS_MIN_LENGTH} caracteres.`)
-    .max(validation.USER_PASS_MAX_LENGTH,
-      `A Senha deve ter no máximo ${validation.USER_PASS_MAX_LENGTH} caracteres.`)
-    .regex(/[A-Z]/,
-      "A senha deve conter pelo menos uma letra maiúscula.")
-    .regex(/[a-z]/,
-      "A senha deve conter pelo menos uma letra minúcula.")
-    .regex(/[0-9]/,
-      "A senha deve conter pelo menos um número.")
-    .regex(/[!@#$%&*,.-^~?<>(\[\]/\\|)]/,
-      "A senha deve conter pelo menos um caractere especial."),
-    
-  role: z.enum(UserRole)
-})
+    password: z.string()
+      .min(validation.USER_PASS_MIN_LENGTH,
+        `A senha deve ter pelo menos ${validation.USER_PASS_MIN_LENGTH} caracteres.`)
+      .max(validation.USER_PASS_MAX_LENGTH,
+        `A Senha deve ter no máximo ${validation.USER_PASS_MAX_LENGTH} caracteres.`)
+      .regex(/[A-Z]/,
+        "A senha deve conter pelo menos uma letra maiúscula.")
+      .regex(/[a-z]/,
+        "A senha deve conter pelo menos uma letra minúcula.")
+      .regex(/[0-9]/,
+        "A senha deve conter pelo menos um número.")
+      .regex(/[!@#$%&*,.-^~?<>(\[\]/\\|)]/,
+        "A senha deve conter pelo menos um caractere especial."),
+
+    confirmPassword: z.string(),
+      
+    role: z.enum(UserRole)
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: "As senhas precisam ser iguais.",
+    path: ["confirmPassword"],
+  })
+
 type SchemaData = z.infer<typeof schema>
 
 type CreateUserDialogProps = {
@@ -65,16 +73,21 @@ function CreateUserDialog(props: CreateUserDialogProps) {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
       role: UserRole.User,
     }
   })
 
   async function handleSubmit(data: SchemaData) {
-    const success = await createUser({ ...data })
+    const success = await createUser({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    })
 
     if (success) {
       form.reset()
-
       props.onOpenChange?.(false)
       props.onSuccess?.()
     }
@@ -135,6 +148,20 @@ function CreateUserDialog(props: CreateUserDialogProps) {
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
                       <PassowordInput placeholder="Um@ S3nha f0rte!" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirmar senha</FormLabel>
+                    <FormControl>
+                      <PassowordInput placeholder="Digite a mesma senha" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
