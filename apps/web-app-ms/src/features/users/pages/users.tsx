@@ -38,7 +38,7 @@ import type { UserRoleBadge } from "../types/user-role-badge"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import { useSearchParams } from "react-router-dom"
-import { PaginationInput } from "../../../components/pagination-input"
+import { PaginationInput } from "@/components/pagination-input"
 
 const pageSize = 10
 
@@ -60,7 +60,6 @@ function UsersPage() {
 
     return Number.isInteger(page) && page >= 1 ? page : 1
   })
-
   const [selectedUser, setSelectedUser] = React.useState<User | null>(null)
   const [showCreateUserDialog, setShowCreateUserDialog] = React.useState(false)
   const [showUpdateUserDialog, setShowUpdateUserDialog] = React.useState(false)
@@ -73,7 +72,7 @@ function UsersPage() {
   })
 
   const totalPages = users.data?.totalPages ?? 1
-  const isLastPage = pageNumber === users.data?.totalPages
+  const isLastPage = pageNumber === totalPages
   const isFirstPage = pageNumber === 1
 
   function handleCreateUser() {
@@ -116,17 +115,18 @@ function UsersPage() {
     setPageNumber(1)
   }
   function handleGoToPreviousPage() {
-    setPageNumber(current => isFirstPage ? current : current - 1)
+    setPageNumber(current => current - 1)
   }
   function handleGoToNextPage() {
-    setPageNumber(current => isLastPage ? current : current + 1)
+    setPageNumber(current => current + 1)
   }
   function handleGoToLastPage() {
     setPageNumber(totalPages)
   }
 
   React.useEffect(function revalidatePageNumber() {
-    setPageNumber(current => current > totalPages ? totalPages : current)
+    if (users.data) setPageNumber(current =>
+      current > totalPages ? totalPages : current)
   }, [totalPages])
 
   React.useEffect(function updatePageNumberOnSearchParams() {
@@ -155,10 +155,10 @@ function UsersPage() {
         <CardContent>
           <div className="flex flex-col gap-2 text-sm mb-4">
             <p>
-              Total de páginas: {users.data?.totalPages}
+              Total de páginas: {users.data?.totalPages ?? "-"}
             </p>
             <p>
-              Usuários: {users.data?.totalCount}
+              Usuários: {users.data?.totalCount ?? "-"}
             </p>
           </div>
           <Table className="w-full">
