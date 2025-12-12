@@ -1,8 +1,8 @@
-# GDASH Junior Full Stack Challenge
+# :crossed_swords: GDASH Junior Full Stack Challenge
 
 Este repositório é destinado à resolução do Desafio para o processo seletivo GDASH 2025/02, disponível [aqui](https://github.com/GDASH-io/desafio-gdash-2025-02).
 
-## Sobre o desafio
+## :label: Sobre o desafio
 
 O desafio consiste na coleta de dados meteorológicos a partir do consumo de uma API Rest de terceiros (neste caso, a [Open-Meteo](https://open-meteo.com/)) por um serviço em Python. Este serviço, então, deve enviar os dados coletados para um Message Broker — neste caso, uma fila do RabbitMQ.
 
@@ -14,7 +14,7 @@ A aplicação, finalmente, é servida por uma SPA (Single-Page Application), uma
 
 Desta forma, temos uma arquitetura baseada em microsserviços, com o Docker e o Docker Compose responsáveis por sustentar toda a infraestrutura.
 
-## Como executar?
+## :cd: Como executar?
 
 ### Requisitos
 
@@ -28,7 +28,8 @@ Para rodar todos os serviços, copie o repositório para sua máquina e, na past
 docker compose up -d
 ```
 
-> **Importante**: você precisará definir as variáveis de ambiente, conforme o arquivo `.env.example` presente na pasta raiz de cada serviço do diretório `apps`. Na prática, crie um arquivo `.env` junto ao `.env.example` de cada diretório, mas com dados válidos.
+> [!IMPORTANT]
+> Você precisará definir as variáveis de ambiente, conforme o arquivo `.env.example` presente na pasta raiz de cada serviço do diretório `apps`. Na prática, crie um arquivo `.env` junto ao `.env.example` de cada diretório, mas com dados válidos.
 
 Os seguintes serviços estarão acessíveis nas respectivas portas:
 - NestJS: `3000`
@@ -39,7 +40,7 @@ Além destas, outras portas estarão ocupadas para a comunicação com:
 - MongoDB: `27017`
 - RabbitMQ: `5672`
 
-### Executado separadamente
+### Executando separadamente
 
 Para executar cada serviço individualmente, basta executar o seguinte comando:
 
