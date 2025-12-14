@@ -14,6 +14,8 @@ A aplicação, finalmente, é servida por uma SPA (Single-Page Application), uma
 
 Desta forma, temos uma arquitetura baseada em microsserviços, com o Docker e o Docker Compose responsáveis por sustentar toda a infraestrutura.
 
+> Veja o resumo das [tecnologias principais](#tecnologias-principais) utilizadas.
+
 ## :cd: Como executar?
 
 ### Requisitos
@@ -102,3 +104,32 @@ Este comando utilizará o gerenciador de pacotes do PNPM para executar o script 
 - Senha: `Admin@1234`
 
 Você deve ver o dashboard climático depois disso. :rocket:
+
+## :iphone: Principais funcionalidades
+
+- Dashboard climático: visualização em gráfico e em tabela dos últimos dados clímáticos coletados pelo serviço provedor, além de uma síntese gerada por IA;
+- CRUD de usuários: visualização em tabela + paginação dos usuários cadastrados, com as opções de exclusão, atualização e criação de novos usuários. Disponível para usuários administradores;
+- Interface responsiva, pensada primariamente para celulares (mobile-first) e facilmente adaptável para telas maiores, como tablets e desktops.
+
+## :gem: Tecnologias principais
+
+- Serviços:
+   1. Python (provedor de dados);
+   2. Go (consumidor da fila);
+- Web Rest API (core da aplicação): NodeJS:
+   - Core: NestJS, TypeScript
+   - ODM: Mongoose;
+   - Cliente IA: OpenRouter;
+   - Gerenciador de pacotes: PNPM;
+- Autenticação: JWT;
+- Banco de dados: MongoDB;
+- Mensageria: RabbitMQ;
+- Front-end web:
+   - Core: React, TypeScript, Vite;
+   - Estilização: shadcn/ui, Tailwind CSS;
+   - Gerenciamento de estado global: Context API;
+   - Cliente HTTP: Axios;
+   - Roteamento: React Router DOM;
+   - Cacheamento dos dados: Tanstack Query (React Query);
+   - Gerenciador de pacotes: PNPM;
+- Infraestrutura: Docker, Docker Compose.
