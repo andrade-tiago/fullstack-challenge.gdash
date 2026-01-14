@@ -29,9 +29,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import React from "react"
-import dayjs from "dayjs"
 import { useQuery } from "@tanstack/react-query"
 import { fetchWeatherLogs } from "../api/fetch-weather-logs"
+import { TimeFormat } from "@/shared/config/time-format"
 
 const chartConfig = {
   temperatureInCelcius: {
@@ -69,7 +69,7 @@ export function WeatherChart(props: AppLineChartCardProps) {
 
   const chartData = React.useMemo(() =>
     weatherLogs.data?.data.map(item => ({ ...item,
-      createdAt: dayjs(item.createdAt).format("HH:mm"),
+      createdAt: new Date(item.createdAt).toLocaleTimeString([], TimeFormat),
     })).reverse(),
     [ weatherLogs.data ]
   )

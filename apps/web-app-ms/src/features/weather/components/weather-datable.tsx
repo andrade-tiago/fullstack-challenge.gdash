@@ -8,9 +8,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Skeleton } from "@/components/ui/skeleton"
-import dayjs from "dayjs"
 import { useQuery } from "@tanstack/react-query"
 import { fetchWeatherLogs } from "../api/fetch-weather-logs"
+import { TimeFormat } from "@/shared/config/time-format"
 
 type WeatherDatatableProps = {
   className?: string
@@ -55,7 +55,7 @@ function WeatherDatatable(props: WeatherDatatableProps) {
         {weatherLogs.data && weatherLogs.data.data.map(item =>
           <TableRow key={item.id}>
             <TableCell>
-              {dayjs(item.createdAt).format("HH:mm")}
+              {new Date(item.createdAt).toLocaleTimeString([], TimeFormat)}
             </TableCell>
             <TableCell>
               {item.temperatureInCelcius.toLocaleString()}°C
